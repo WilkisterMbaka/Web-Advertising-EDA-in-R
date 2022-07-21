@@ -4,19 +4,17 @@ author: "Wilkister Mbaka"
 date: "15/07/2022"
 output: html_document
 ---
-  
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
+
+```R
 ## R Markdown
 
 ##Defining the Question
 a) Specifying the Question
-We are tasked with cleaning the dataset and finding patterns within it by performing EDA
+Perform exploratory data analysis on the provided dataset and identify which individuals are most likely to click on her ads.
 
 b) Defining the metrics of success 
-This project will be considered a success when we have found patterns and visualized them where necessary.
+To perform univariate and bivariate data analysis and based on that, provide recommendations and on which individuals are most likely to click on her ads.
 
 c) Understanding the context
 A Kenyan entrepreneur has created an online cryptography course and would want to advertise it on her blog. She currently targets audiences originating from various countries. In the past, she ran ads to advertise a related course on the same blog and collected data in the process. She would now like to employ your services as a Data Science Consultant to help her identify which individuals are most likely to click on her ads.
@@ -25,8 +23,9 @@ d) experimental design taken
 1) Load the dataset
 2) Clean the dataset.
 3) perform Exploratory data analysis
+```
 
-```{r}
+```R
 #installing packages
 install.packages("data.table")
 library(data.table)
@@ -36,18 +35,18 @@ advert <- fread("http://bit.ly/IPAdvertisingData")
 #Previewing the first 6 rows
 head(advert)
 ```
-```{r}
+```R
 #Checking the datatypes
 str(advert)
 ```
 
-```{r}
+```R
 #Finding the total number of missing values in each column
 colSums(is.na(advert))
 #There are no missing values in the dataset
 ```
 
-```{r}
+```R
 #Finding duplicated entries within the dataset
 duplicated_rows <- advert[duplicated(advert),]
 #Printing out the duplicated entries
@@ -56,7 +55,7 @@ duplicated_rows
 ```
 
 ##Checking for outliers
-```{r}
+```R
 #Checking for outliers using boxplot
 install.packages("dplyr")
 library(dplyr)
@@ -69,7 +68,7 @@ boxplot(data_num2)
 ##Exploratory Data Analysis
 ##Univariate Analysis
 #Measures of Central Tendency
-```{r}
+```R
 #Finding the mean of the numerical columns
 advert_mean1 <- mean(advert$`Daily Time Spent on Site`)
 advert_mean2 <- mean(advert$Age)
@@ -86,7 +85,7 @@ advert_mean4
 #
 ```
 
-```{r}
+```R
 ##Median
 #Finding the Median of the numerical columns
 advert_median1 <- median(advert$`Daily Time Spent on Site`)
@@ -104,7 +103,7 @@ advert_median4
 ```
 
 ##Mode
-```{r}
+```R
 #Creating a function for finding mode
 getmode <- function(v) {
   uniqv <- unique(v)
@@ -127,7 +126,7 @@ advert_mode4
 
 ##Measures of Dispersion
 #Maximum values in each numerical column
-```{r}
+```R
 #Finding the maximum values in each cloumn
 advert_max1 <- max(advert$`Daily Time Spent on Site`)
 advert_max2 <- max(advert$Age)
@@ -144,7 +143,7 @@ advert_max4
 ```
 
 #Minimum values in the numerical columns
-```{r}
+```R
 #Finding the minimum values in each cloumn
 advert_min1 <- min(advert$`Daily Time Spent on Site`)
 advert_min2 <- min(advert$Age)
@@ -161,7 +160,7 @@ advert_min4
 ```
 
 ##Quantiles 
-```{r}
+```R
 #Finding the quantiles in each cloumn
 advert_quan1 <- quantile(advert$`Daily Time Spent on Site`)
 advert_quan2 <- quantile(advert$Age)
@@ -178,7 +177,7 @@ advert_quan4
 ```
 
 ##Variance
-```{r}
+```R
 #Finding the variance in each cloumn
 advert_var1 <- var(advert$`Daily Time Spent on Site`)
 advert_var2 <- var(advert$Age)
@@ -195,7 +194,7 @@ advert_var4
 ```
 
 ##Standard Deviation
-```{r}
+```R
 #Finding the standard deviation in each cloumn
 advert_sd1 <- sd(advert$`Daily Time Spent on Site`)
 advert_sd2 <- sd(advert$Age)
@@ -212,7 +211,7 @@ advert_sd4
 ```
 
 ##Skeweness
-```{r}
+```R
 #importing the necessary packages
 install.packages('moments')
 library(moments)
@@ -233,7 +232,7 @@ advert_sk4
 ```
 
 ##Kurtosis
-```{r}
+```R
 #Finding the skewness in each cloumn
 advert_kr1 <- kurtosis(advert$`Daily Time Spent on Site`)
 advert_kr2 <- kurtosis(advert$Age)
@@ -252,7 +251,7 @@ advert_kr4
 
 ##Bivariate analysis
 ##Scatter plots
-```{r}
+```R
 #Plotting a scatter plot for age and daily time spent on site
 #Assigning age to age column
 age <- advert$Age
@@ -264,17 +263,17 @@ plot(age, daily, xlab = "Age", ylab = "daily time spent on site" )
 ```
 
 #Scatter plot between area income and daily internet usage
-```{r}
+```R
 #Assigning each column its respective name
 area <- advert$`Area Income`
 usage <- advert$`Daily Internet Usage`
 #Plotting the scatter plot
 plot(area, usage, xlab = "Area Income", ylab = "daily internet usage" )
-#Peaople with 55000 to 75000 income use the internet more
+#People with 55000 to 75000 income use the internet more
 ```
 
 ##Barplots
-```{r}
+```R
 #Assigning values to column names
 income <- advert$`Area Income`
 age <- advert$Age
@@ -284,7 +283,7 @@ barplot(income,                                       # Add labels to barplot
 ```
 
 ##Covariance among variables
-```{r}
+```R
 #Printing out covariances 
 cov(age, income)
 cov(area, usage)
@@ -293,7 +292,7 @@ cov(income, usage )
 ```
 
 ##Correlation
-```{r}
+```R
 #Finding the correlation of the numerical columns
 # Identify numeric columns
 # Install dplyr
@@ -321,11 +320,11 @@ corrplot(M, method="number")
 ##Conclusion
 
 Below are some of the conclusions we have:
-1) Most of the customers in the site are of the average age of 36.
-2) Customers between the age of 30 - 50 spend the most time on the site.Customers at the age of 31 are the most in the site.
-3) Customers at the age of 31 are the most in the site.
+1) Most of the individuals in the site are of the average age of 36.
+2) Individuals between the age of 30 - 50 spend the most time on the site.
+3) Individuals at the age of 31 are the most in the site.
 
 ##Reccomendations
 our reccomendations are:
-1) More advertisement should cater to customers in their 30s.
+1) More advertisement should cater to individuals in their 30s but extend to the age bracket (30-50).
 
