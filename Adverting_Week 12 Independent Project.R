@@ -321,37 +321,11 @@ corrplot(M, method="number")
 ##Conclusion
 
 Below are some of the conclusions we have:
-  1) Most of the customers are of the average age of 36.
-2) Customers at the age of 31 are the most in the site.
-3) Customers between the age of 30 - 50 spend the most time on the site.
+1) Most of the customers in the site are of the average age of 36.
+2) Customers between the age of 30 - 50 spend the most time on the site.Customers at the age of 31 are the most in the site.
+3) Customers at the age of 31 are the most in the site.
 
 ##Reccomendations
 our reccomendations are:
-  1) More sensitisation should be done to customers in their 30s.
+1) More advertisement should cater to customers in their 30s.
 
-##Conclusion
-
-Below are some of the conclusions we have:
-  1) Most of the customers are of the average age of 36.
-2) Customers at the age of 31 are the most in the site.
-3) Customers between the age of 30 - 50 spend the most time on the site.
-
-##Reccomendations
-our reccomendations are:
-  1) More sensitisation should be done to customers in their 30s.
-
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-You have no unread notifications
