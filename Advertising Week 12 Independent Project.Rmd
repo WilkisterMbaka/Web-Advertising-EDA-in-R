@@ -18,18 +18,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Defining the Question
 #a) Specifying the Question
-#Perform exploratory data analysis on the provided dataset and identify which individuals are 
+#Perform exploratory data analysis on the provided dataset and identify which individuals are
 #most likely to click on her ads.
 
-#b) Defining the metrics of success 
-#To perform univariate and bivariate data analysis and based on that, provide recommendations 
+#b) Defining the metrics of success
+#To perform univariate and bivariate data analysis and based on that, provide recommendations
 #and on which individuals are most likely to click on her ads.
 
 #c) Understanding the context
-#A Kenyan entrepreneur has created an online cryptography course and would want to advertise 
-#it on her blog. She currently targets audiences originating from various countries. In the past, 
-#she ran ads to advertise a related course on the same blog and collected data in the process. 
-#She would now like to employ your services as a Data Science Consultant to help her identify 
+#A Kenyan entrepreneur has created an online cryptography course and would want to advertise
+#it on her blog. She currently targets audiences originating from various countries. In the past,
+#she ran ads to advertise a related course on the same blog and collected data in the process.
+#She would now like to employ your services as a Data Science Consultant to help her identify
 #which individuals are most likely to click on her ads.
 
 #d) experimental design taken
@@ -282,9 +282,54 @@ advert_kr3
 advert_kr4
 #All the kurtosis values are less than 3 which is called Platykurtic.
 ```
+### Categorical Columns
+```{r}
+#ad.topic.line
+
+uniq_topic <- unique(advert$`Ad Topic Line`, )
+length(uniq_topic)
+# There are 1000 unique topic lines meaning it would be impossible to get a good visualization. 
+
+```
+#### city 
+```{r}
+# city 
+
+uniq_city <- unique(advert$City, )
+length(uniq_city)
+# There are 969 unique cities hence it would also be impossible to get a good visualization
+```
+
+```{r}
+#country 
+
+uniq_country <- unique(advert$Country)
+length(uniq_country)
+# There are 237 unique countries. 
+```
 
 ##Bivariate analysis 
 ##Scatter plots
+
+```{r}
+#Area income vs clicked on ad
+library(ggplot2)
+ggplot(data = advert, mapping = aes(x = `Area Income`)) + 
+  geom_freqpoly(mapping = aes(colour = `Clicked on Ad`), binwidth = 2000)
+# Areas with higher area income clicked on the ad more
+```
+```{r}
+### Gender
+
+male <- advert$Male
+male_freq <- table(male)
+barplot(male_freq, main= 'Gender Distribution', xlab="Gender",
+ylab="Number of people",
+border="red",
+col="steelblue")
+# Slightly more females than male(0 is female)
+```
+
 
 ``` {r}
 #Plotting a scatter plot for age and daily time spent on site
@@ -363,6 +408,7 @@ Below are some of the conclusions we have:
 2.   Individuals between the age of 30 - 50 spend the most time on the
     site.
 3.  Individuals at the age of 31 are the most in the site.
+4. Areas with higher area income clicked on the ad more
 
 ##Recommendations
 
