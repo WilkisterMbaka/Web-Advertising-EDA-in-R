@@ -12,42 +12,62 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Advertising - Supervised Learning
 
-``` {r}
-## R Markdown
+## Defining the Question
 
-##Defining the Question
-#a) Specifying the Question
-#Perform exploratory data analysis on the provided dataset and identify which individuals are
-#most likely to click on her ads.
+**Specifying the Question**
 
-#b) Defining the metrics of success
-#To perform univariate and bivariate data analysis and based on that, provide recommendations
-#and on which individuals are most likely to click on her ads.
+Perform exploratory data analysis on the provided dataset and identify which individuals are 
+most likely to click on her ads.
 
-#c) Understanding the context
-#A Kenyan entrepreneur has created an online cryptography course and would want to advertise
-#it on her blog. She currently targets audiences originating from various countries. In the past,
-#she ran ads to advertise a related course on the same blog and collected data in the process.
-#She would now like to employ your services as a Data Science Consultant to help her identify
-#which individuals are most likely to click on her ads.
+**Defining the metrics of success**
 
-#d) experimental design taken
-#1) Load the dataset
-#2) Clean the dataset.
-#3) perform Exploratory data analysis
-```
+To perform univariate and bivariate data analysis and based on that, provide recommendations 
+and on which individuals are most likely to click on her ads.
+
+**Understanding the context**
+
+A Kenyan entrepreneur has created an online cryptography course and would want to advertise 
+it on her blog. She currently targets audiences originating from various countries. In the past, 
+she ran ads to advertise a related course on the same blog and collected data in the process. 
+She would now like to employ your services as a Data Science Consultant to help her identify 
+which individuals are most likely to click on her ads.
+
+**Experimental design taken**
+
+1) Load the dataset
+2) Clean the dataset.
+3) perform Exploratory data analysis
+
+## Reading The Data
 
 ``` {r}
 #installing packages
 library(data.table)
+library(ggplot2)
+
 #
 #Loading the dataset
 advert <- fread("http://bit.ly/IPAdvertisingData")
+```
+
+## Checking The Data
+```{r}
 #Previewing the first 6 rows
 head(advert)
 ```
+```{r}
+#Previewing the last 6 rows
+tail(advert)
+```
 
+
+```{r}
+# Dimensionanity of the data
+dim(advert)
+```
+There are 1000 rows and 10 columns
 ``` {r}
 #Checking the datatypes
 str(advert)
@@ -55,22 +75,23 @@ str(advert)
 # The dataset has integer, number, character and datetime datatype
 ```
 
+## Tidying The Dataset
 
 ``` {r}
 #Finding the total number of missing values in each column
 colSums(is.na(advert))
-#There are no missing values in the dataset
 ```
+There are no missing values in the dataset
 
 ``` {r}
 #Finding duplicated entries within the dataset
 duplicated_rows <- advert[duplicated(advert),]
 #Printing out the duplicated entries
 duplicated_rows
-#There are no duplicates in the datset
 ```
+There are no duplicates in the datset
 
-##Checking for outliers
+**Checking for outliers**
 
 ``` {r}
 #Checking for outliers using boxplot
@@ -82,10 +103,14 @@ boxplot(data_num2)
 #income different areas, we fail to drop them
 ```
 
-##Exploratory Data Analysis 
-##Univariate Analysis 
-#Measures of Central Tendency
+## Exploratory Data Analysis
 
+### Univariate Analysis 
+
+**Numerical variables**
+**Measures of Central Tendency**
+
+**Mean**
 ``` {r}
 #Finding the mean of the numerical columns
 advert_mean1 <- mean(advert$`Daily Time Spent on Site`)
@@ -102,9 +127,8 @@ advert_mean3
 advert_mean4
 #
 ```
-
+**Median**
 ``` {r}
-##Median
 #Finding the Median of the numerical columns
 advert_median1 <- median(advert$`Daily Time Spent on Site`)
 advert_median2 <- median(advert$Age)
@@ -120,8 +144,7 @@ advert_median3
 advert_median4
 ```
 
-##Mode
-
+**Mode**
 ``` {r}
 #Creating a function for finding mode
 getmode <- function(v) {
@@ -144,8 +167,9 @@ advert_mode3
 advert_mode4
 ```
 
-##Measures of Dispersion #Maximum values in each numerical column
+**Measures of Dispersion** 
 
+**Maximum**
 ``` {r}
 #Finding the maximum values in each cloumn
 advert_max1 <- max(advert$`Daily Time Spent on Site`)
@@ -163,8 +187,7 @@ advert_max3
 advert_max4
 ```
 
-#Minimum values in the numerical columns
-
+**Minimum**
 ``` {r}
 #Finding the minimum values in each column
 advert_min1 <- min(advert$`Daily Time Spent on Site`)
@@ -182,8 +205,7 @@ advert_min3
 advert_min4
 ```
 
-##Quantiles
-
+**Quantiles**
 ``` {r}
 #Finding the quantiles in each cloumn
 advert_quan1 <- quantile(advert$`Daily Time Spent on Site`)
@@ -200,8 +222,7 @@ advert_quan3
 advert_quan4
 ```
 
-##Variance
-
+**Variance**
 ``` {r}
 #Finding the variance in each cloumn
 advert_var1 <- var(advert$`Daily Time Spent on Site`)
@@ -218,8 +239,7 @@ advert_var3
 advert_var4
 ```
 
-##Standard Deviation
-
+**Standard Deviation**
 ``` {r}
 #Finding the standard deviation in each cloumn
 advert_sd1 <- sd(advert$`Daily Time Spent on Site`)
@@ -236,8 +256,7 @@ advert_sd3
 advert_sd4
 ```
 
-##Skeweness
-
+**Skeweness**
 ``` {r}
 #importing the necessary packages
 library(moments)
@@ -264,8 +283,7 @@ advert_sk3
 advert_sk4
 ```
 
-##Kurtosis
-
+**Kurtosis**
 ``` {r}
 #Finding the skewness in each cloumn
 advert_kr1 <- kurtosis(advert$`Daily Time Spent on Site`)
@@ -282,99 +300,115 @@ advert_kr3
 advert_kr4
 #All the kurtosis values are less than 3 which is called Platykurtic.
 ```
-### Categorical Columns
+```{r fig.height=3, fig.width=6}
+library (tidyr)
+advert %>%
+  gather(attributes, value, 1:4) %>%
+  ggplot(aes(x = value)) +
+  geom_histogram(fill = 'lightblue2', color = 'black') +
+  facet_wrap(~attributes, scales = 'free_x') +
+  labs(x="Values", y="Frequency") +
+  theme_bw()
+```
+
+1. Area Income is left skewed with the bracket between 60000 to 80000 having a high number of visitors to the site
+2. Age is left skewed with the age bracket with a higher number of visitors is 30-31
+
+
+**Categorical Values**
+
+**Ad Topic Line**
 ```{r}
-#ad.topic.line
+#Unique values in the column
 
 uniq_topic <- unique(advert$`Ad Topic Line`, )
 length(uniq_topic)
-# There are 1000 unique topic lines meaning it would be impossible to get a good visualization. 
-
 ```
-#### city 
+There are 1000 unique topic lines meaning it would be impossible to get a good visualization. 
+
+**City** 
 ```{r}
-# city 
+#Unique values in the column
 
 uniq_city <- unique(advert$City, )
 length(uniq_city)
-# There are 969 unique cities hence it would also be impossible to get a good visualization
 ```
+There are 969 unique cities hence it would also be impossible to get a good visualization
 
+**Country**
 ```{r}
-#country 
-
+#Unique values in the column
 uniq_country <- unique(advert$Country)
 length(uniq_country)
-# There are 237 unique countries. 
 ```
+There are 237 unique countries. 
 
-##Bivariate analysis 
-##Scatter plots
+**Gender**
+```{r}
+### Gender
+ggplot(advert, aes(x = factor(Male))) +
+  geom_bar(fill="steelblue") +  ggtitle('Count of Gender')
+# male <- advert$Male
+# male_freq <- table(male)
+# barplot(male_freq, main= 'Gender Distribution', xlab="Gender",
+# ylab="Number of people",
+# col="steelblue")
+```
+Slightly more females than male(0 is female)
+
+**Clicked on Ad**
+```{r}
+# Countplot for clicked on ad column
+# This is to see the number of people that clicked on the ad 
+
+ggplot(advert, aes(x = factor(`Clicked on Ad`))) +
+  geom_bar(fill="steelblue") +  ggtitle('Count of Clicked on Ad')
+```
+There are equal values of clicked and not clicked on ad
+
+
+**### Bivariate analysis** 
+
 
 ```{r}
 #Area income vs clicked on ad
-library(ggplot2)
 ggplot(data = advert, mapping = aes(x = `Area Income`)) + 
   geom_freqpoly(mapping = aes(colour = `Clicked on Ad`), binwidth = 2000)
-# Areas with higher area income clicked on the ad more
 ```
+As income increases, the rate of clicking on the Ad also increases
+
+**Gender vs Clicked on Ad**
 ```{r}
-### Gender
-
-male <- advert$Male
-male_freq <- table(male)
-barplot(male_freq, main= 'Gender Distribution', xlab="Gender",
-ylab="Number of people",
-border="red",
-col="steelblue")
-# Slightly more females than male(0 is female)
+# How the genders click on the Ad
+ggplot(advert, aes(x = factor(Male), fill = factor(`Clicked on Ad`))) +
+  geom_bar() +  ggtitle('Gender vs Clicked on Ad')
 ```
+From the data, We have slightly more women than men visiting the site and more women clicking on the Ad.
 
-
-``` {r}
-#Plotting a scatter plot for age and daily time spent on site
-#Assigning age to age column
-age <- advert$Age
-#Assigning daily time to its column
-daily <- advert$`Daily Time Spent on Site`
-#Creating a scatter plot
-plot(age, daily, xlab = "Age", ylab = "daily time spent on site" )
-#The plot is scattered with no visible relationship bettween age and time spent 
+**Age vs Daily Time Spent on Site**
+```{r}
+# Which Age group visits the site regularly
+ggplot(advert, aes(x = `Daily Time Spent on Site`, y = Age, col = factor(`Clicked on Ad`))) +
+  geom_point() +  ggtitle('Age vs Daily Time Spent on Site')
 ```
+Visitors to the site who spent less time on the site were likely to click on the Ad
 
-#Scatter plot between area income and daily internet usage
-
-``` {r}
-#Assigning each column its respective name
-area <- advert$`Area Income`
-usage <- advert$`Daily Internet Usage`
-#Plotting the scatter plot
-plot(area, usage, xlab = "Area Income", ylab = "daily internet usage" )
-#As the income increases the number of people using internet increases
+**Area Income vs Daily Time Spent on Site**
+```{r}
+# How the area income relates to the daily time spent on site
+ggplot(advert, aes(x = `Daily Time Spent on Site`, y = `Area Income`, col = factor(`Clicked on Ad`))) +
+  geom_point() +  ggtitle('Area Income vs Daily Time Spent on Site')
 ```
+People who live in high income areas and spend more time on the sight are highly unlikely to click on the Ad
 
-##Barplots
-
-``` {r}
-#Assigning values to column names
-income <- advert$`Area Income`
-age <- advert$Age
-#Plotting the bargraph
-barplot(income,                                       # Add labels to barplot
-        names.arg = age)
+**Daily Internet Usage  vs Daily Time Spent on Site**
+```{r}
+ggplot(advert, aes(x = `Daily Time Spent on Site`, y = `Daily Internet Usage`, col = factor(`Clicked on Ad`))) +
+  geom_point() +  ggtitle('Daily Internet Usage  vs Daily Time Spent on Site')
 ```
+People whose daily internet usage is less and also the daily time spent on site is less are highly likey to click on the Ad
 
-##Covariance among variables
-
-``` {r}
-#Printing out covariances 
-cov(age, income)
-cov(area, usage)
-cov(age, area)
-cov(income, usage )
-```
-
-##Correlation
+**Correlation**
 
 ``` {r}
 #Finding the correlation of the numerical columns
@@ -389,18 +423,18 @@ library(corrplot)
 # correlation matrix
 M<-cor(data_num2)
 corrplot(M, method="number")
-#From the correlation plot
-#1.  There is a moderate positive correlation of 0.52 between Daily internet usage and 
-#Daily time spent on site.
-#2.  There is also a weak positive correlation of 0.31 between area income and daily time 
-#spent on site
-#3.  There is a high negative correlation of -0.75 between clicked on ad and daily time 
-#spent on site
-#4.  There is a high negative correlation of -0.79 between clicked on ad and daily internet
-#usage
 ```
+From the correlation plot
+1.  There is a moderate positive correlation of 0.52 between Daily internet usage and Daily time spent on site.
 
-##Conclusion
+2.  There is also a weak positive correlation of 0.31 between area income and daily time spent on site
+
+3.  There is a high negative correlation of -0.75 between clicked on ad and daily time spent on site
+
+4.  There is a high negative correlation of -0.79 between clicked on ad and daily internet usage
+
+
+## Conclusion
 
 Below are some of the conclusions we have:
 
@@ -408,11 +442,15 @@ Below are some of the conclusions we have:
 2.   Individuals between the age of 30 - 50 spend the most time on the
     site.
 3.  Individuals at the age of 31 are the most in the site.
-4. Areas with higher area income clicked on the ad more
 
-##Recommendations
+## Recommendations
 
 Our recommendations are:
 
 1.   More advertisement should cater to individuals in their 30s but
     extend to the age bracket (30-50).
+
+
+
+
+
